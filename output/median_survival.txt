@@ -1,0 +1,6 @@
+Call: survfit(formula = Surv(AVAL_M, Event) ~ group, data = km_data)
+
+                             n events median 0.95LCL 0.95UCL
+group=overall             1106    420   33.7    32.4    38.3
+group=tablemab x 52 weeks  551    220   33.1    26.7    38.1
+group=vismab x 52 weeks    555    200   37.1    32.7    42.7

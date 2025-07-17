@@ -145,16 +145,20 @@ km_data <- rbind(
 km <- survfit(Surv(AVAL_M, Event) ~ group, data = km_data)
 
 ## create a KM plot based on the survival object
-ggsurvplot(km, 
-           conf.int = FALSE, 
+km_plot <- ggsurvplot(km, 
+           conf.int = TRUE, 
            data = km_data, 
+           break.time.by = 10,
+           risk.table = TRUE,
+           risk.table.y.text = FALSE,
+           risk.table.title = "Number at risk",
            xlab = "Time (months)",
-           legend.title = "Treatment group",
-           legend.labs = c("Overall", "Tablemab x 52 weeks", "Vismab x 52 weeks")) + 
-  ggtitle("Kaplan-Meier plot between treatment and survival")
+           legend.title = "Treatment",
+           legend.labs = c("Overall", "Tablemab x 52 weeks", "Vismab x 52 weeks"),
+           title = "Kaplan-Meier plot between treatment and survival") 
 
 ## save the generated plot to the output folder
-ggsave("./output/KM_plot.png", width = 8, height = 6)
+ggsave("./output/KM_plot.pdf", print(km_plot))
 
 #### b. median survival
 ## median survival could be directly obtained from the survival object created in part a
@@ -202,19 +206,19 @@ hazard_data <- rbind(
              hazard = fit_trt1$hazard,
              lowerCI = fit_trt1$lower.ci,
              upperCI = fit_trt1$upper.ci,
-             trt = "tablemab x 52 weeks"),
+             Treatment = "tablemab x 52 weeks"),
   data.frame(time = fit_trt2$time,
              hazard = fit_trt2$hazard,
              lowerCI = fit_trt2$lower.ci,
              upperCI = fit_trt2$upper.ci,
-             trt = "vismab x 52 weeks")
+             Treatment = "vismab x 52 weeks")
 )
 
 ## plot the hazard plot based on the estimates
 ggplot(hazard_data, aes(time)) +
-  geom_line(aes(y = hazard, col = trt)) + 
-  geom_ribbon(aes(ymin = lowerCI, ymax = upperCI, fill = trt), alpha = 0.2) + 
-  ggtitle("Smoothed hazard rate estimates (95% confidence intervals) for tablemab and vismab groups over time") + 
+  geom_line(aes(y = hazard, col = Treatment)) + 
+  geom_ribbon(aes(ymin = lowerCI, ymax = upperCI, fill = Treatment), alpha = 0.2) + 
+  ggtitle("Smoothed hazard rate estimates (95% confidence intervals) by treatment over time") + 
   ylab("Hazard rate") + 
   xlab("Time (months)")
 # the hazard curves cross over, suggesting non-proportional hazards
@@ -231,14 +235,15 @@ sink("./output/stratified_cox.txt")
 summary(cox)
 sink()
 
-
+# test the proportional hazards assumption for the cox model
+cox.zph(cox)
 
 # ---- Question 6 ----
 #### Calculate the RMST for each treatment arm at 48 months
 ## Add a new variable to indicate treatment by 0 (vismab) or 1 (tablemab)
 rmean_data <- filtered_data %>% mutate(TRT01PB = if_else(TRT01P == "tablemab x 52 weeks", 1, 0))
 
-## Compare RMST between tablemab and vismab patientss
+## Compare RMST between tablemab and vismab patients
 rmean_results <- rmst2(rmean_data$AVAL_M, rmean_data$Event, rmean_data$TRT01PB, tau = 48)
 
 ## save the results to the output folder

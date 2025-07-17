@@ -1,0 +1,5 @@
+# A tibble: 2 × 4
+  TRT01P              median_age perc_hormone_pos perc_radiotherapy
+  <chr>                    <dbl>            <dbl>             <dbl>
+1 tablemab x 52 weeks         63             60.8              6.90
+2 vismab x 52 weeks           63             58.9              6.49

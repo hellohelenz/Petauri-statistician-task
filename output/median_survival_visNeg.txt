@@ -1,0 +1,4 @@
+Call: survfit(formula = Surv(AVAL_M, Event) ~ 1, data = vismab_neg)
+
+       n events median 0.95LCL 0.95UCL
+[1,] 228     44   26.2    23.7      NA

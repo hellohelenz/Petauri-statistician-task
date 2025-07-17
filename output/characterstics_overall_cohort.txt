@@ -1,0 +1,4 @@
+# A tibble: 1 × 3
+  median_age perc_hormone_pos perc_radio_pos
+       <dbl>            <dbl>          <dbl>
+1         63             59.9           6.69
