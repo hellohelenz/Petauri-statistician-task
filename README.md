@@ -14,3 +14,4 @@ To launch the project on your machine, you can
 - save the .zip folder I shared with you via email
 After unzipping the foler, please launch the Petauri-statistician-task.Rproj (rather than the R script) and open the analysis_script.R file from RStudio.
 
+Looking forward to your feedback ;)
